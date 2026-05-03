@@ -41,3 +41,6 @@ build/
 *.keystore
 *.p12
 google-services.json
+
+
+licenses
