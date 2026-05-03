@@ -158,9 +158,11 @@ In `AddCarScreen.kt`, after the user picks a file, extract text and pass it as `
 
 ## Build release APK
 
-```bash
-./gradlew assembleRelease
+gradle assembleDebug
+gradle assembleRelease
 # Output: app/build/outputs/apk/release/app-release-unsigned.apk
 ```
 
 Sign with your keystore for Play Store distribution.
+OR
+gradle bundleRelease
