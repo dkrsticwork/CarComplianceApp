@@ -1,0 +1,43 @@
+# --- IDE / Android Studio ---
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+*.iml
+*.ipr
+*.iws
+
+# --- Windows Specific ---
+# Ignore Windows system files that Terminal might touch
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# --- Build Artifacts ---
+# Ignore the generated APKs and bundles
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# --- Gradle ---
+# We keep the wrapper but ignore the user-specific cache
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# --- Secrets & Keys ---
+# CRITICAL: Never commit your signing keys or sensitive API keys
+*.jks
+*.keystore
+*.p12
+google-services.json
