@@ -158,8 +158,8 @@ In `AddCarScreen.kt`, after the user picks a file, extract text and pass it as `
 
 ## Build release APK
 
-gradle assembleDebug
-gradle assembleRelease
+gradle assembleDebug  
+gradle assembleRelease  
 # Output: app/build/outputs/apk/release/app-release-unsigned.apk
 ```
 
