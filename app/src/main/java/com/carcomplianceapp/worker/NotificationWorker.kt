@@ -16,7 +16,6 @@ import com.carcomplianceapp.R
 import com.carcomplianceapp.data.local.PreferencesManager
 import com.carcomplianceapp.data.repository.TaskRepository
 import com.carcomplianceapp.domain.model.TaskStatus
-import com.carcomplianceapp.domain.model.UrgencyLevel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @HiltWorker
 class DeadlineNotificationWorker @AssistedInject constructor(
@@ -45,7 +43,7 @@ class DeadlineNotificationWorker @AssistedInject constructor(
                 val daysUntil = ChronoUnit.DAYS.between(today, dueDate)
 
                 val shouldNotify = when {
-                    daysUntil < 0 -> true // overdue — always notify
+                    daysUntil < 0 -> true
                     daysUntil <= 1 && prefs.oneDay -> true
                     daysUntil <= 7 && prefs.sevenDays -> true
                     daysUntil <= 30 && prefs.thirtyDays -> true
@@ -150,8 +148,6 @@ class DeadlineNotificationWorker @AssistedInject constructor(
 
 @AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
-    @Inject lateinit var preferencesManager: PreferencesManager
-
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED ||
             intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {

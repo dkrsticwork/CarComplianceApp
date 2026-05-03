@@ -11,8 +11,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Configuration
 import com.carcomplianceapp.data.local.PreferencesManager
 import com.carcomplianceapp.ui.AppNavGraph
 import com.carcomplianceapp.ui.Routes
@@ -27,11 +29,19 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltAndroidApp
-class CarComplianceApplication : Application() {
+class CarComplianceApplication : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
     override fun onCreate() {
         super.onCreate()
         DeadlineNotificationWorker.createNotificationChannel(this)
-        DeadlineNotificationWorker.scheduleDaily(this)
     }
 }
 
@@ -48,6 +58,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        DeadlineNotificationWorker.scheduleDaily(this)
         setContent {
             CarComplianceTheme {
                 Surface(
@@ -57,9 +68,8 @@ class MainActivity : ComponentActivity() {
                     val startViewModel: StartViewModel = hiltViewModel()
                     val onboardingDone by startViewModel.onboardingDone.collectAsState()
 
-                    // Wait for prefs to load before choosing start destination
                     when (val done = onboardingDone) {
-                        null -> {} // splash / loading (blank is fine for MVP)
+                        null -> {}
                         else -> {
                             val start = if (done) Routes.MAIN else Routes.WELCOME
                             AppNavGraph(startDestination = start)
